@@ -1,4 +1,4 @@
-// Version: 2026-0202-1000
+// Version: 2026-0202-1030
 import * as THREE from "https://esm.sh/three";
 import { Pane } from "https://cdn.skypack.dev/tweakpane@4.0.4";
 
@@ -133,6 +133,17 @@ createPreloader();
 const logo = document.querySelector('.site-logo');
 let logoStretchX = 0;
 let logoTargetStretchX = 0;
+
+// Initialize tracking for ARIA announcements
+window.lastAnnouncedSlide = -1;
+
+// Logo keyboard interaction
+logo.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    logo.click();
+  }
+});
 
 const updateLogoStretch = () => {
   // Smooth interpolation
@@ -501,6 +512,9 @@ const updateDistortion = (slide, factor, deltaTime) => {
 };
 
 const updateTitlePositions = () => {
+  let centerSlideIndex = -1;
+  let minDistance = Infinity;
+  
   slides.forEach((slide, i) => {
     const slideScreenPos = new THREE.Vector3(
       slide.position.x,
@@ -515,6 +529,13 @@ const updateTitlePositions = () => {
     titleData.element.style.top = `${y}px`;
     titleData.element.style.transform = `translate(-50%, -50%)`;
     const distanceFromCenter = Math.abs(slide.position.x);
+    
+    // Track which slide is closest to center
+    if (distanceFromCenter < minDistance) {
+      minDistance = distanceFromCenter;
+      centerSlideIndex = i % titleElements.length;
+    }
+    
     const fadeStart = settings.textFadeStart;
     const fadeEnd = settings.textFadeEnd;
     let opacity = 1;
@@ -530,6 +551,18 @@ const updateTitlePositions = () => {
     titleData.element.style.opacity = opacity;
     titleData.element.style.filter = `blur(${blur}px)`;
   });
+  
+  // Update ARIA live region when center slide changes
+  if (centerSlideIndex !== -1 && centerSlideIndex !== window.lastAnnouncedSlide) {
+    const announcer = document.getElementById('screen-reader-announcer');
+    if (announcer && minDistance < 1.0) { // Only announce when close to center
+      const titleData = titleElements[centerSlideIndex];
+      const titleText = titleData.element.querySelector('.title-text')?.textContent || '';
+      const numberText = titleData.element.querySelector('.title-number')?.textContent || '';
+      announcer.textContent = `現在顯示：${titleText} ${numberText}`;
+      window.lastAnnouncedSlide = centerSlideIndex;
+    }
+  }
 };
 
 // Drag and scroll functionality

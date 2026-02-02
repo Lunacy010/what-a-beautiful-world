@@ -1,4 +1,4 @@
-<!-- Version: 2026-0202-1000 -->
+<!-- Version: 2026-0202-1030 -->
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -96,7 +96,7 @@
   
   <!-- Logo in top left corner -->
   <div class="logo-container">
-    <img src="image-01/logo.webp" alt="Corners Unspoken Logo" class="site-logo">
+    <img src="image-01/logo.webp" alt="Corners Unspoken Logo" class="site-logo" tabindex="0" role="button">
   </div>
   
   <!-- Preloader with ARIA live region -->
@@ -112,6 +112,13 @@
   
   <!-- Main Content -->
   <main id="main-content">
+    <!-- ARIA Live Region for screen readers -->
+    <div id="screen-reader-announcer" 
+         aria-live="polite" 
+         aria-atomic="true" 
+         class="sr-only">
+    </div>
+    
     <footer role="contentinfo">
       <p>DRAG TO EXPLORE<br>TAP DESCRIBE TO NEXT PAGE</p>
     </footer>
