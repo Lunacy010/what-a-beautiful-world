@@ -1,4 +1,4 @@
-/* Version: 2026-0202-0930 */
+/* Version: 2026-0202-1000 */
 @import url("https://fonts.cdnfonts.com/css/thegoodmonolith");
 @import url("https://fonts.cdnfonts.com/css/pp-neue-montreal");
 
@@ -335,8 +335,7 @@ footer {
   padding-bottom: 6px;
   border-radius: 6px;
   transform: scale(1.15) translateX(5px);
-  filter: blur(1.5px);
-  animation: textDistort 0.6s ease-in-out;
+  animation: textDistort 0.6s ease-in-out forwards;
 }
 
 .description-text a:hover::after,
